@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { MdDeleteOutline } from "react-icons/md";
 
-const TaskItem = ({ todo }) => {
+const TaskItem = ({ todo, active }) => {
   const [checked, setChecked] = useState(todo.done);
 
   return (
-    <li className="flex gap-2">
+    <li className="flex gap-2 items-center my-4">
       <input
         type="checkbox"
         checked={checked}
@@ -13,6 +14,11 @@ const TaskItem = ({ todo }) => {
         }}
       />
       <span>{todo.text}</span>
+      {active === "completed" && (
+        <span className="justify-self-end">
+          <MdDeleteOutline />
+        </span>
+      )}
     </li>
   );
 };

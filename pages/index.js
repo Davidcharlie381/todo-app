@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Raleway } from "next/font/google";
 import { useState, useRef } from "react";
 import TaskItem from "../components/TaskItem";
+import { MdDeleteOutline } from "react-icons/md";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -13,7 +14,7 @@ const initialTodos = [
 
 export default function Home() {
   const [todo, setTodo] = useState("");
-  const [active, setActive] = useState("active");
+  const [active, setActive] = useState("completed");
   const [todos, setTodos] = useState(initialTodos);
 
   let activeTodos = todos.filter((todo) => todo.done === false);
@@ -23,8 +24,9 @@ export default function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTodos([...todos, { id: Math.random(), done: false, text: todo }]);
     inputRef.current.value = "";
+    setTodos([...todos, { id: Math.random(), done: false, text: todo }]);
+    // inputRef.current.value = "";
   };
 
   return (
@@ -91,7 +93,7 @@ export default function Home() {
                   setTodo(e.target.value);
                 }}
               />
-              <button className="bg-[#2F80ED] w-[20%] rounded-lg text-white shadow-md">
+              <button className="bg-[#2F80ED] w-[20%] rounded-lg text-white shadow-sm shadow-[#2F80ED]">
                 Add
               </button>
             </form>
@@ -99,27 +101,33 @@ export default function Home() {
           {active === "all" && (
             <ul className="mx-auto mt-5 w-[88%] lg:max-w-[40%]">
               {todos.map((todo) => (
-                <TaskItem todo={todo} />
+                <TaskItem todo={todo} key={todo.id} />
               ))}
             </ul>
           )}
           {active === "active" && (
             <ul className="mx-auto mt-5 w-[88%] lg:max-w-[40%]">
               {activeTodos.map((todo) => (
-                <TaskItem todo={todo} />
+                <TaskItem todo={todo} key={todo.id} />
               ))}
             </ul>
           )}
           {active === "completed" && (
-            <ul className="mx-auto mt-5 w-[88%] lg:max-w-[40%]">
-              {completedTodos.map((todo) => (
-                <TaskItem todo={todo} />
-              ))}
-            </ul>
+            <>
+              <ul className="mx-auto mt-5 w-[88%] lg:max-w-[40%]">
+                {completedTodos.map((todo) => (
+                  <TaskItem todo={todo} key={todo.id} active={active} />
+                ))}
+              </ul>
+              <div className="mx-auto mt-5 w-[88%] lg:max-w-[40%]">
+                <button className="bg-[#EB5757] text-white flex justify-center items-center gap-1 px-6 py-3 rounded-md shadow-sm shadow-[#EB5757]">
+                  <MdDeleteOutline /> Delete all
+                </button>
+              </div>
+            </>
           )}
         </div>
       </main>
     </>
   );
 }
-
